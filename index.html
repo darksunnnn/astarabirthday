@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Asta</title>
+    <!-- Tambahkan di dalam <head> -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden; /* Mencegah scroll, kita pakai tombol next */
+            background-color: #f6de90;
+            color: #f6de90;
+        }
+
+        .page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.8s ease-in-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .page.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* --- PAGE 1: HOME --- */
+        #page1 {
+            background-color: #f6de90;
+            color: #6a3a41;
+            flex-direction: row;
+            justify-content: space-evenly;
+        }
+        
+        .title-section h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4vw;
+            font-weight: 400;
+            letter-spacing: 2px;
+            line-height: 1.2;
+        }
+        
+        /* Container Gambar & Topi */
+.image-section {
+    position: relative;
+    display: inline-block;
+    text-align: center;
+}
+
+/* Tetapan Gambar Potret (Nisbah 3:4 mengikut img1.jpg) */
+.image-section img {
+    width: clamp(220px, 28vw, 320px);
+    aspect-ratio: 3 / 4; /* Sesuai dengan saiz gambar potret */
+    object-fit: cover;
+    border-radius: 16px; /* Lengkungan sudut halus (boleh diubah ke 0 jika mahu petak) */
+    display: block;
+}
+
+/* Styling untuk Topi Gambar (topi.jpg) */
+/* Styling Topi Gambar + Animasi Jatuh */
+.party-hat-img {
+    position: absolute;
+    top: -190px;          /* Posisi akhir topi di atas kepala */
+    left: 50%;
+    transform: translateX(-25%) rotate(20deg);
+    width: 70px;         /* Ukuran lebar topi */
+    height: auto;
+    z-index: 10;
+    pointer-events: none;
+    filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.15));
+
+    /* === TAMBAHAN ANIMASI JATUH === */
+    opacity: 0; /* Tersembunyi dulu sebelum animasi mulai */
+    animation: dropHat 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    animation-delay: 0.4s; /* Tunggu 0.4 detik setelah halaman dimuat baru topi jatuh */
+}
+
+/* === KEYFRAMES ANIMASI TOPI JATUH === */
+@keyframes dropHat {
+    0% {
+        opacity: 0;
+        /* Dimulai dari posisi tinggi di atas (-180px) dan sedikit miring */
+        transform: translateX(-25%) translateY(-180px) rotate(-15deg) scale(0.8);
+    }
+    70% {
+        opacity: 1;
+        /* Jatuh sedikit melebihi target (efek mendarat/bounce) */
+        transform: translateX(-25%) translateY(px) rotate(20deg) scale(1.05);
+    }
+    100% {
+        opacity: 1;
+        /* Kembali ke posisi akhir yang pas */
+        transform: translateX(-25%) translateY(0) rotate(20deg) scale(1);
+    }
+}
+        
+        .btn-open {
+            margin-top: 30px;
+            padding: 10px 30px;
+            border: 1px solid #6a3a41;
+            background: transparent;
+            border-radius: 50px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            color: #6a3a41;
+        }
+        
+        .btn-open:hover {
+            background: #6a3a41;
+            color: #fff;
+        }
+
+        /* --- PAGE 2: POLAROIDS & TYPING --- */
+        #page2 {
+            background-color: #f6de90;
+            flex-direction: row;
+            padding: 50px;
+        }
+
+        .text-container {
+            flex: 1;
+            padding-right: 80px;
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-style: italic;
+            line-height: 1.6;
+            color: #6a3a41;
+            text-align: justify;    /* Membuat teks rata kanan dan kiri */
+             margin-left: 80px;      /* Menggeser seluruh blok teks ke arah kanan */
+             max-width: 600px;
+        }
+
+        .polaroid-container {
+            flex: 1;
+            position: relative;
+            height: 80vh;
+        }
+
+        .polaroid {
+            position: absolute;
+            background: #ffffff;
+            padding: 10px 10px 40px 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            transition: transform 0.3s;
+        }
+        
+        .polaroid img {
+            width: 150px;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .p1 { top: 8%; left: 28%; transform: rotate(-15deg); z-index: 1; }
+        .p2 { top: 16%; left: 50%; transform: rotate(10deg); z-index: 2; }
+        .p3 { top: 46%; left: 20%; transform: rotate(-5deg); z-index: 3; }
+        .p4 { top: 36%; left: 60%; transform: rotate(20deg); z-index: 4; }
+        .p5 { top: 56%; left: 40%; transform: rotate(-10deg); z-index: 5; }
+
+        .polaroid:hover {
+            z-index: 10;
+            transform: scale(1.1) rotate(0deg);
+        }
+
+        /* --- PAGE 3: ADJECTIVES --- */
+        #page3 {
+            position: relative;
+        }
+
+       .blob-frame {
+    width: clamp(240px, 30vw, 340px);
+    height: clamp(240px, 30vw, 340px);
+    background: var(--accent-sage); 
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    animation: morph 8s ease-in-out infinite;
+    position: relative;
+    box-shadow: 0 15px 35px rgba(132, 156, 138, 0.25);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    /* === TAMBAHAN BARU === */
+    overflow: hidden; /* Kunci agar foto terpotong mengikuti bentuk gelombang blob */
+    border: 6px solid var(--card-cream); /* Pindahkan garis pinggir (border) ke frame ini */
+}
+
+        @keyframes morph {
+            0%, 100% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+            34% { border-radius: 70% 30% 50% 50% / 30% 30% 70% 70%; }
+            67% { border-radius: 100% 60% 60% 100% / 100% 100% 60% 60%; }
+        }
+
+       .blob-frame img {
+    width: 100%;  /* Ubah menjadi 100% agar memenuhi seluruh bentuk blob */
+    height: 100%; /* Ubah menjadi 100% */
+    object-fit: cover; /* Agar foto tidak gepeng */
+    
+    /* Hapus border dan border-radius lingkaran yang lama */
+    border-radius: 0; 
+    border: none;
+}
+
+        .adjective {
+            position: absolute;
+            font-size: 18px;
+            color: #6a3a41;
+            letter-spacing: 1px;
+        }
+        
+        .adj1 { top: 20%; left: 20%; }
+        .adj2 { top: 15%; right: 25%; }
+        .adj3 { top: 50%; left: 15%; }
+        .adj4 { top: 50%; right: 15%; }
+        .adj5 { bottom: 20%; left: 25%; }
+        .adj6 { bottom: 15%; right: 20%; }
+
+        /* --- PAGE 4: LETTER --- */
+        .letter-box {
+            background: #6a3a41;
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 800px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            text-align: justify;
+        }
+
+        .letter-box h2 {
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 20px;
+            color: #f5ece9;
+        }
+
+        .letter-box p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+
+        .thumbnails {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .thumbnails img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border: 2px solid #555;
+            border-radius: 5px;
+        }
+
+        /* --- PAGE 5: SONGS --- */
+        #page5 {
+            background-color: #6a3a41; /* Warna merah marun/burgundy */
+            flex-direction: row;
+            padding: 50px;
+            justify-content: center;
+            gap: 50px;
+        }
+
+        .big-photo img {
+            width: 350px;
+            height: 450px;
+            object-fit: cover;
+            border-radius: 5px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+            filter: grayscale(100%); /* Bikin hitam putih seperti di video */
+        }
+
+        .playlist-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 50px;
+            margin-bottom: 5px;
+        }
+
+        .playlist-section p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            font-style: italic;
+            color: #d1c4c4;
+        }
+
+        .album-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .album-grid img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: 0.3s;
+        }
+        
+        .album-grid img:hover {
+            transform: scale(1.05);
+        }
+
+        /* Tombol Navigasi Umum */
+        .btn-nav {
+            position: absolute;
+            bottom: 40px;
+            right: 50px;
+            padding: 10px 25px;
+            border: 1px solid #fff;
+            background: transparent;
+            color: #fff;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 14px;
+        }
+
+        .btn-nav:hover {
+            background: #fff;
+            color: #6a3a41;
+        }
+        
+        .btn-nav.left {
+            right: auto;
+            left: 50px;
+        }
+        
+
+    </style>
+</head>
+<body>
+
+    <audio id="bg-music" loop>
+        <source src="lagu.mp3"audio/mpeg">
+    </audio>
+
+    <section id="page1" class="page active">
+        <div class="title-section">
+            <h1>HAPPY<br>BIRTHDAY<br>SAYANG!</h1>
+        </div>
+        <div class="image-section">
+            <img src="topi.png" class="party-hat-img" alt="Topi Ulang Tahun">
+            <img src="img1.png" alt="Baby Asta" onerror="this.src='https://via.placeholder.com/250x250/e0e0e0?text=Foto+Bayi'">
+            <br>
+            <button class="btn-open" onclick="nextPage(1)">open me</button>
+        </div>
+    </section>
+
+    <section id="page2" class="page">
+        <div class="text-container">
+            <span id="typing-text"></span>
+        </div>
+        <div class="polaroid-container">
+            <div class="polaroid p1"><img src="img5.jpeg" onerror="this.src='https://via.placeholder.com/150x180'"></div>
+            <div class="polaroid p2"><img src="img3.jpeg" onerror="this.src='https://via.placeholder.com/150x180'"></div>
+            <div class="polaroid p3"><img src="img4.jpeg" onerror="this.src='https://via.placeholder.com/150x180'"></div>
+            <div class="polaroid p4"><img src="img2.jpeg" onerror="this.src='https://via.placeholder.com/150x180'"></div>
+            <div class="polaroid p5"><img src="img6.jpeg" onerror="this.src='https://via.placeholder.com/150x180'"></div>
+        </div>
+        <button class="btn-nav" onclick="nextPage(2)">Next ➔</button>
+    </section>
+
+    <section id="page3" class="page">
+        <div class="adjective adj1">thoughtful ✨</div>
+        <div class="adjective adj2">Loyal 🌸</div>
+        <div class="adjective adj3">Warmhearted 🌟</div>
+        <div class="adjective adj4">Beauty ☁️</div>
+        <div class="adjective adj5">Funny 🌻</div>
+        <div class="adjective adj6">Charming 🦋</div>
+        
+        <div class="blob-frame">
+            <img src="img7.jpeg" alt="Asta" onerror="this.src='https://via.placeholder.com/260x260'">
+        </div>
+        <button class="btn-nav" onclick="nextPage(3)">Next ➔</button>
+    </section>
+
+    <section id="page4" class="page">
+        <div class="letter-box">
+            <h2>Happy Birthday, Asta.</h2>
+            <p>Aku harap hari ini memberikanmu kebahagiaan yang sama seperti kebahagiaan yang selalu kamu berikan ke orang- rang di sekitarmu. Terima kasih sudah menjadi seseorang yang membuat segalanya terasa lebih ringan, tenang, dan berarti.</p>
+            <p>Seberapa biasa pun hari itu, kamu selalu punya cara untuk membuatnya jadi lebih berkesan. Aku berdoa semoga tahun ini memberimu kesehatan yang baik, kenangan baru yang indah, dan momen momen yang membuatmu bahagia dari hati yang paling dalam.</p>
+            <p>Walaupun website ini sangat sederhana, setiap bagiannya dibuat sambil memikirkanmu. Selamat ulang tahun sekali lagi. Aku harap harimu terasa spesial dari awal sampai akhir.</p>
+            <p style="text-align: right; margin-top: 30px; font-style: italic;">Love, Zeken.</p>
+            
+            <div class="thumbnails">
+                <img src="img8.jpeg" onerror="this.src='https://via.placeholder.com/70x70'">
+                <img src="img9.jpeg" onerror="this.src='https://via.placeholder.com/70x70'">
+                <img src="img10.jpeg" onerror="this.src='https://via.placeholder.com/70x70'">
+                <img src="img11.jpeg" onerror="this.src='https://via.placeholder.com/70x70'">
+                <img src="img12.jpeg" onerror="this.src='https://via.placeholder.com/70x70'">
+            </div>
+        </div>
+        <button class="btn-nav" onclick="nextPage(4)">Next ➔</button>
+    </section>
+
+    <section id="page5" class="page">
+        <div class="big-photo">
+            <img src="covermain.jpeg" alt="Asta Black and White" onerror="this.src='https://via.placeholder.com/350x450'">
+        </div>
+        <div class="playlist-section">
+            <h2>Songs</h2>
+            <p>that remind me of you</p>
+            <div class="album-grid">
+                <img src="cover1.jpg" onerror="this.src='https://via.placeholder.com/120x120'">
+                <img src="cover2.jpg" onerror="this.src='https://via.placeholder.com/120x120'">
+                <img src="cover3.jpg" onerror="this.src='https://via.placeholder.com/120x120'">
+                <img src="cover4.jpg" onerror="this.src='https://via.placeholder.com/120x120'">
+                <img src="cover5.jpg" onerror="this.src='https://via.placeholder.com/120x120'">
+                <img src="cover6.jpg" onerror="this.src='https://via.placeholder.com/120x120'">
+            </div>
+        </div>
+        <button class="btn-nav left" onclick="prevPage(5)">⬅ Back</button>
+        <button class="btn-nav" style="right: 32px;" onclick="restart()">Kembali ke Awal ➞</button>
+    </section>
+
+    <script>
+      const pages = document.querySelectorAll('.page');
+        const music = document.getElementById('bg-music');
+        
+        const message = "Setiap foto ini membawa cerita dan kenangan tersendiri. Senyum, kehangatan, dan hal hal sederhana yang membuat setiap momen bersamamu selalu indah untuk dikenang. long live astaku!";
+        let i = 0;
+        let isTyping = false;
+
+        // Fungsi efek mengetik
+        function typeWriter() {
+            if (i < message.length) {
+                document.getElementById("typing-text").innerHTML += message.charAt(i);
+                i++;
+                setTimeout(typeWriter, 40);
+            }
+        }
+
+        // Fungsi ke halaman selanjutnya
+        function nextPage(currentIndex) {
+            if(currentIndex === 1) {
+                music.play().catch(e => console.log("Autoplay memerlukan interaksi pengguna."));
+            }
+
+            // Hapus class 'active' dari halaman saat ini, berikan ke halaman berikutnya
+            pages[currentIndex - 1].classList.remove('active');
+            pages[currentIndex].classList.add('active');
+
+            // Mulai efek ngetik jika baru masuk page 2
+            if(currentIndex === 1 && !isTyping) {
+                isTyping = true;
+                setTimeout(typeWriter, 400);
+            }
+
+            // Simpan posisi halaman ke memori browser
+            localStorage.setItem('activePage', currentIndex + 1);
+        }
+
+        // Fungsi kembali ke halaman sebelumnya
+        function prevPage(currentIndex) {
+            pages[currentIndex - 1].classList.remove('active');
+            pages[currentIndex - 2].classList.add('active');
+            
+            // Update posisi di memori browser
+            localStorage.setItem('activePage', currentIndex - 1);
+        }
+
+        // Fungsi kembali ke Halaman 1 (Restart)
+        function restart() {
+            // Hapus class 'active' dari SEMUA halaman
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
+
+            // Aktifkan Halaman 1
+            pages[0].classList.add('active');
+            
+            // Reset memori ke Halaman 1
+            localStorage.setItem('activePage', 1);
+        }
+
+        // Cek posisi halaman saat browser di-refresh
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedPage = localStorage.getItem('activePage');
+            
+            if (savedPage) {
+                const pageNum = parseInt(savedPage);
+                
+                // Pastikan nomor halaman valid
+                if(pageNum >= 1 && pageNum <= pages.length) {
+                    // Matikan semua halaman dulu
+                    pages.forEach(page => page.classList.remove('active'));
+                    // Hidupkan halaman terakhir yang disimpan
+                    pages[pageNum - 1].classList.add('active');
+                    
+                    // Jika ter-refresh saat sudah lewat halaman 1, langsung jalankan efek ketik
+                    if(pageNum >= 2 && !isTyping) {
+                        isTyping = true;
+                        document.getElementById("typing-text").innerHTML = ""; // Bersihkan teks dulu
+                        setTimeout(typeWriter, 400);
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
